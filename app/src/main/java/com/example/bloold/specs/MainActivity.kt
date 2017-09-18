@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity(), Adapter.onButtonListener, onScreenUpda
 
     override fun onButtonClick(position: Int) {
         model.tryToMove(position)
-        Log.d("trymove", position.toString())
     }
 
     override fun screenUpdate(gameModel: Vector<Button>) {
