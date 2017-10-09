@@ -6,11 +6,15 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.GridView
 import android.widget.Toast
+import java.lang.Math.sqrt
 import java.util.*
 
 class MainActivity : AppCompatActivity(), Adapter.onButtonListener, onScreenUpdate {
     private lateinit var gvField: GridView
-    private var size = 8
+    private lateinit var btnStart: android.widget.Button
+    private lateinit var algorithm: Algorithm
+
+    private var size = 16
 
     private var model: Model = Model(size, this)
     private lateinit var adapter: Adapter
@@ -19,15 +23,21 @@ class MainActivity : AppCompatActivity(), Adapter.onButtonListener, onScreenUpda
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        gvField = findViewById(R.id.gvField) as GridView
+        gvField = findViewById(R.id.gvField)
 
-        gvField.numColumns = 3
+        gvField.numColumns = sqrt(size.toDouble()).toInt()
 
         adapter = Adapter(this, model.gameModel)
 
         gvField.adapter = adapter
         gvField.horizontalSpacing = 24
         gvField.verticalSpacing = 24
+
+        btnStart = findViewById(R.id.btnStart)
+        btnStart.setOnClickListener( { v ->
+            algorithm = Algorithm(com.example.bloold.specs.State(model, null, 0))
+            algorithm.solve()
+        } )
     }
 
     override fun onButtonClick(position: Int) {
