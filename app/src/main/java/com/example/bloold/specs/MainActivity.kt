@@ -3,6 +3,7 @@ package com.example.bloold.specs
 import android.graphics.ColorSpace
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.widget.GridView
 import android.widget.Toast
@@ -13,6 +14,8 @@ class MainActivity : AppCompatActivity(), Adapter.onButtonListener, onScreenUpda
     private lateinit var gvField: GridView
     private lateinit var btnStart: android.widget.Button
     private lateinit var algorithm: Algorithm
+    private lateinit var handler: Handler
+    private lateinit var runnable: Runnable
 
     private var size = 16
 
@@ -35,8 +38,35 @@ class MainActivity : AppCompatActivity(), Adapter.onButtonListener, onScreenUpda
 
         btnStart = findViewById(R.id.btnStart)
         btnStart.setOnClickListener( { v ->
-            algorithm = Algorithm(com.example.bloold.specs.State(model, null, 0))
-            algorithm.solve()
+            val startState = com.example.bloold.specs.State(model, null,0)
+            algorithm = Algorithm(startState)
+            var state = algorithm.solve()
+
+            /*val vector = Vector<Int>()
+
+            while(state?.lastStep != null){
+                vector.add(state.lastStep)
+            }
+
+            Log.d("states", vector.size.toString())
+            /*for(i: Int in 0..vector.size - 1){
+                vector[i].printState()
+            }*/
+
+            handler = Handler()
+            runnable = Runnable {
+                if(!vector.isEmpty()){
+                    var i = vector.removeAt(vector.size - 1)
+                    if(i != null)
+                        startState.screenMovePos(i)
+                    else
+                        Log.d("null", vector.size.toString())
+
+                    handler.postDelayed(runnable, 1000)
+                }
+            }
+
+            handler.postDelayed(runnable, 1000)*/
         } )
     }
 

@@ -1,7 +1,9 @@
 package com.example.bloold.specs
 
 import android.util.Log
+import android.view.Display
 import java.lang.Math.abs
+import java.lang.Math.sqrt
 import java.util.*
 
 /**
@@ -18,20 +20,21 @@ class Model {
     var gameModel = Vector<Button>()
     private lateinit var listener: onScreenUpdate
 
-    constructor(size: Int = 16, listener: onScreenUpdate){
+    constructor(size: Int = 9, listener: onScreenUpdate){
         this.size = size - 1
         this.listener = listener
+        halfSize = sqrt(size.toDouble()).toInt()
         randomFill()
     }
 
     fun randomFill(){
         var visible = true
 
-        gameModel.addElement(Button(getX(0), getY(0), 1, visible))
+        /*gameModel.addElement(Button(getX(0), getY(0), 1, visible))
         gameModel.addElement(Button(getX(1), getY(2), 1 + 1, visible))
         gameModel.addElement(Button(getX(2), getY(3), 2 + 1, visible))
         gameModel.addElement(Button(getX(3), getY(4), 3 + 1, visible))
-        gameModel.addElement(Button(getX(4), getY(4), 4 + 1, visible))
+        gameModel.addElement(Button(getX(4), getY(4), 4 + 1, false))
         gameModel.addElement(Button(getX(5), getY(5), 5 + 1, visible))
         gameModel.addElement(Button(getX(6), getY(6), 6 + 1, visible))
         gameModel.addElement(Button(getX(7), getY(7), 7 + 1, visible))
@@ -42,13 +45,13 @@ class Model {
         gameModel.addElement(Button(getX(12), getY(12), 12 + 1, visible))
         gameModel.addElement(Button(getX(13), getY(13), 13 + 1, visible))
         gameModel.addElement(Button(getX(14), getY(14), 14 + 1, visible))
-        gameModel.addElement(Button(getX(11), getY(11), 11 + 1, visible))
+        gameModel.addElement(Button(getX(11), getY(11), 11 + 1, visible))*/
 
-        /*for(i: Int in 0..size){
+        for(i: Int in 0..size){
             if(i == size)
                 visible = false
             gameModel.addElement(Button(getX(i), getY(i), i + 1, visible))
-        }*/
+        }
     }
 
     fun getX(position: Int): Int{
@@ -61,6 +64,7 @@ class Model {
 
     fun isWin(): Boolean {
         for (i: Int in 0..size) {
+            Log.d("${i}", gameModel[i].value.toString())
             if(gameModel[i].value != i + 1)
                 return false
         }
@@ -81,6 +85,10 @@ class Model {
         listener.screenUpdate(gameModel)
     }
 
+    fun screenMove(){
+        listener.screenUpdate(gameModel)
+    }
+
     private fun move(position: Int): Model{
         val tryX: Int = getX(position)
         val tryY: Int = getY(position)
@@ -96,7 +104,7 @@ class Model {
             gameModel[getButton(size + 1)].value = gameModel[position].value
             gameModel[position].value = value
             gameModel[position].visible = false
-            Log.d("moveb", "1")
+            //Log.d("moveb", "1")
         }
         return this
     }
@@ -105,7 +113,7 @@ class Model {
         var distance = 0
 
         for (i: Int in 0..size) {
-            distance += distanceOneButton(i, gameModel[i].value)
+            distance += distanceOneButton(i, gameModel[i].value - 1)
         }
 
         return distance
@@ -121,30 +129,38 @@ class Model {
 
         var curStep = x * halfSize + y
         var possibleSteps = Vector<State>()
-        var copyModel = this
+        var copyModel: Model
 
         //x + 1, y
         var newStep = (x + 1) * halfSize + y
         if(newStep != lastStep && newStep > 0 && newStep <= size){
-            possibleSteps.addElement(State(copyModel.move(newStep), curStep, h + 1))
+            copyModel = Model(size + 1, listener)
+            copyModel.gameModel = gameModel.clone() as Vector<Button>
+            possibleSteps.add(State(copyModel.move(newStep), curStep,h + 1))
         }
 
         //x - 1, y
         newStep = (x - 1) * halfSize + y
         if(newStep != lastStep && newStep > 0 && newStep <= size){
-            possibleSteps.addElement(State(copyModel.move(newStep), curStep, h + 1))
+            copyModel = Model(size + 1, listener)
+            copyModel.gameModel = gameModel.clone() as Vector<Button>
+            possibleSteps.add(State(copyModel.move(newStep), curStep,h + 1))
         }
 
         //x, y + 1
         newStep = x * halfSize + y + 1
         if(newStep != lastStep && newStep > 0 && newStep <= size){
-            possibleSteps.addElement(State(copyModel.move(newStep), curStep, h + 1))
+            copyModel = Model(size + 1, listener)
+            copyModel.gameModel = gameModel.clone() as Vector<Button>
+            possibleSteps.add(State(copyModel.move(newStep), curStep,h + 1))
         }
 
         //x, y - 1
         newStep = x * halfSize + y - 1
         if(newStep != lastStep && newStep > 0 && newStep <= size){
-            possibleSteps.addElement(State(copyModel.move(newStep), curStep, h + 1))
+            copyModel = Model(size + 1, listener)
+            copyModel.gameModel = gameModel.clone() as Vector<Button>
+            possibleSteps.add(State(copyModel.move(newStep), curStep,h + 1))
         }
 
         return possibleSteps
