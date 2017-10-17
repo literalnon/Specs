@@ -45,10 +45,10 @@ class Adapter(private val context: Context, private var btnList: Vector<com.exam
 
         btnDigit.setOnClickListener({
             listener.onButtonClick(position)
-            Log.d("click", position.toString())
+            //Log.d("click", position.toString())
         })
 
-        btnDigit.background = context.getDrawable(R.drawable.placeholder)
+        btnDigit.background = context.getDrawable(R.drawable.button_shape)
 
         if(btnList[position].visible)
             btnDigit.visibility = View.VISIBLE

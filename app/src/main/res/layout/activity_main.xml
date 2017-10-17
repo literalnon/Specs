@@ -5,19 +5,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.bloold.specs.MainActivity">
+    tools:context="com.example.bloold.specs.MainActivity"
+    android:background="@drawable/back">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Пятнашки"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:drawableLeft="@drawable/t_s"
+            android:drawablePadding="16dp"
+            android:gravity="left|center_vertical"/>
+
+    </android.support.v7.widget.Toolbar>
 
     <Button
         android:id="@+id/btnStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:text="Start" />
+        android:text="Start"
+        android:background="@drawable/start_btn"
+        android:layout_marginBottom="64dp"
+        android:elevation="25dp"/>
 
     <GridView
         android:id="@+id/gvField"
         android:layout_width="@dimen/field_width"
         android:layout_height="@dimen/field_height"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"/>
 
 </FrameLayout>

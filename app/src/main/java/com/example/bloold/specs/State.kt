@@ -7,7 +7,7 @@ import java.util.*
 /**
  * Created by bloold on 07.10.17.
  */
-class State(private var model: Model, public var lastStep: Int?, var height: Int): Comparable<State> {
+class State(public var model: Model, public var lastStep: Int?, public var prevState: State?, var height: Int): Comparable<State> {
     override fun compareTo(other: State): Int {
         return countDistance() + height - other.countDistance() - other.height
     }
@@ -17,7 +17,7 @@ class State(private var model: Model, public var lastStep: Int?, var height: Int
     }
 
     fun getPossibleSteps(): Vector<State>{
-        return model.getPossibleSteps(lastStep, height)
+        return model.getPossibleSteps(lastStep, this, height)
     }
 
     fun countDistance(): Int{
@@ -29,7 +29,7 @@ class State(private var model: Model, public var lastStep: Int?, var height: Int
     }
 
     fun printState(){
-        for(i: Int in 0..15){
+        for(i: Int in 15 downTo 0){
             Log.d("Solve ${i}", model.gameModel[i].value.toString())
         }
     }

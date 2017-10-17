@@ -64,7 +64,7 @@ class Model {
 
     fun isWin(): Boolean {
         for (i: Int in 0..size) {
-            Log.d("${i}", gameModel[i].value.toString())
+            //Log.d("${i}", gameModel[i].value.toString())
             if(gameModel[i].value != i + 1)
                 return false
         }
@@ -123,44 +123,70 @@ class Model {
         return  abs(getX(curState) - getX(realState)) + abs(getY(curState) - getY(realState))
     }
 
-    fun getPossibleSteps(lastStep: Int?, h: Int): Vector<State>{
+    fun print(){
+        for(i: Int in 0..15){
+            Log.d("Solve ${i}", gameModel[i].value.toString())
+        }
+    }
+
+
+    fun getPossibleSteps(lastStep: Int?, prevState: State?, h: Int): Vector<State>{
         val x: Int = getX(getButton(size + 1))
         val y: Int = getY(getButton(size + 1))
-
+/*
+        Log.d("insteps", "${lastStep}")
+        print()
+*/
         var curStep = x * halfSize + y
         var possibleSteps = Vector<State>()
         var copyModel: Model
 
         //x + 1, y
         var newStep = (x + 1) * halfSize + y
-        if(newStep != lastStep && newStep > 0 && newStep <= size){
+        if(newStep != lastStep && newStep > 0 && newStep <= size && getY(newStep) == y){
             copyModel = Model(size + 1, listener)
-            copyModel.gameModel = gameModel.clone() as Vector<Button>
-            possibleSteps.add(State(copyModel.move(newStep), curStep,h + 1))
+            for(i: Int in 0..15)
+                copyModel.gameModel[i] = Button(gameModel[i].getCoordinates().first,
+                        gameModel[i].getCoordinates().second,
+                        gameModel[i].value,
+                        gameModel[i].visible)
+            possibleSteps.add(State(copyModel.move(newStep), curStep, prevState, h + 1))
         }
 
         //x - 1, y
         newStep = (x - 1) * halfSize + y
-        if(newStep != lastStep && newStep > 0 && newStep <= size){
+        if(newStep != lastStep && newStep > 0 && newStep <= size && getY(newStep) == y){
             copyModel = Model(size + 1, listener)
-            copyModel.gameModel = gameModel.clone() as Vector<Button>
-            possibleSteps.add(State(copyModel.move(newStep), curStep,h + 1))
+            for(i: Int in 0..15)
+                copyModel.gameModel[i] = Button(gameModel[i].getCoordinates().first,
+                        gameModel[i].getCoordinates().second,
+                        gameModel[i].value,
+                        gameModel[i].visible)
+            possibleSteps.add(State(copyModel.move(newStep), curStep, prevState, h + 1))
         }
 
         //x, y + 1
         newStep = x * halfSize + y + 1
-        if(newStep != lastStep && newStep > 0 && newStep <= size){
+        if(newStep != lastStep && newStep > 0 && newStep <= size && getX(newStep) == x){
             copyModel = Model(size + 1, listener)
-            copyModel.gameModel = gameModel.clone() as Vector<Button>
-            possibleSteps.add(State(copyModel.move(newStep), curStep,h + 1))
+            for(i: Int in 0..15)
+                copyModel.gameModel[i] = Button(gameModel[i].getCoordinates().first,
+                        gameModel[i].getCoordinates().second,
+                        gameModel[i].value,
+                        gameModel[i].visible)
+            possibleSteps.add(State(copyModel.move(newStep), curStep, prevState, h + 1))
         }
 
         //x, y - 1
         newStep = x * halfSize + y - 1
-        if(newStep != lastStep && newStep > 0 && newStep <= size){
+        if(newStep != lastStep && newStep > 0 && newStep <= size && getX(newStep) == x){
             copyModel = Model(size + 1, listener)
-            copyModel.gameModel = gameModel.clone() as Vector<Button>
-            possibleSteps.add(State(copyModel.move(newStep), curStep,h + 1))
+            for(i: Int in 0..15)
+                copyModel.gameModel[i] = Button(gameModel[i].getCoordinates().first,
+                        gameModel[i].getCoordinates().second,
+                        gameModel[i].value,
+                        gameModel[i].visible)
+            possibleSteps.add(State(copyModel.move(newStep), curStep, prevState, h + 1))
         }
 
         return possibleSteps

@@ -38,35 +38,42 @@ class MainActivity : AppCompatActivity(), Adapter.onButtonListener, onScreenUpda
 
         btnStart = findViewById(R.id.btnStart)
         btnStart.setOnClickListener( { v ->
-            val startState = com.example.bloold.specs.State(model, null,0)
-            algorithm = Algorithm(startState)
-            var state = algorithm.solve()
+            val startState = com.example.bloold.specs.State(model, null, null,0)
+            var state: State?
 
-            /*val vector = Vector<Int>()
+            btnStart.text = "Wait..."
 
-            while(state?.lastStep != null){
-                vector.add(state.lastStep)
+            if(startState.isSolve()) {
+                state = startState
+            } else {
+                algorithm = Algorithm(startState)
+                state = algorithm.solve()
             }
 
-            Log.d("states", vector.size.toString())
-            /*for(i: Int in 0..vector.size - 1){
-                vector[i].printState()
-            }*/
+            btnStart.text = "Start"
+
+            val vector = Vector<State>()
+
+            while(state?.prevState != null){
+                vector.add(state)
+                state = state.prevState
+            }
+            vector.add(state)
 
             handler = Handler()
             runnable = Runnable {
                 if(!vector.isEmpty()){
                     var i = vector.removeAt(vector.size - 1)
-                    if(i != null)
-                        startState.screenMovePos(i)
-                    else
-                        Log.d("null", vector.size.toString())
+                    if(i != null) {
+                        i.screenMove()
+                        model = i.model
+                    }
 
-                    handler.postDelayed(runnable, 1000)
+                    handler.postDelayed(runnable, 700)
                 }
             }
 
-            handler.postDelayed(runnable, 1000)*/
+            handler.postDelayed(runnable, 700)
         } )
     }
 

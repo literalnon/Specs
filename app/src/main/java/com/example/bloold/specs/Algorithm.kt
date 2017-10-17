@@ -13,33 +13,46 @@ class Algorithm(private val startState: State) {
     private var closed = ArrayList<State>()
 
     fun solve(): State? {
-        solveTree.add(startState)
+        if(!startState.isSolve())
+            solveTree.add(startState)
+
         var steps: Vector<State>
 
         while(!solveTree.isEmpty()){
-            /*for (i: Int in 0..solveTree.size - 1) {
+            /*
+            for (i: Int in 0..solveTree.size - 1) {
                 Log.d("solve_tree", solveTree.toList().get(i).countDistance().toString())
                 solveTree.toList().get(i).printState()
             }*/
             //получить множество состояний
-            var cur_step = solveTree.poll()
-            //Log.d("TAG", (cur_step.countDistance()).toString())
-            //cur_step.printState()
-
+            var cur_step = solveTree.poll()/*
+            Log.d("TAG", (cur_step.countDistance()).toString())
+            cur_step.printState()*/
 
             steps = cur_step.getPossibleSteps()
+/*
+            Log.d("possible", steps.size.toString())
 
+            for (i: Int in 0..steps.size - 1) {
+                Log.d("possible", steps.toList().get(i).countDistance().toString())
+                steps.toList().get(i).printState()
+            }
+*/
             closed.add(cur_step)
             //посчитать для каждого расстояние
             //положить на стек
             for (step: State in steps) {
+                //Log.d("stateinadd", ":")
+                //step.printState()
                 if(contains(step))
                     continue
                 if(step.isSolve())
                     return step
 
                 solveTree.add(step)
+
                 //Log.d("stateadd", ":")
+
                 //step.printState()
             }
 
@@ -51,12 +64,15 @@ class Algorithm(private val startState: State) {
 
     fun contains(state: State): Boolean{
         for(i: State in closed){
-            var iVec = i.getGameModel()
-            for(v: Int in 0..15){
-                if(state.getGameModel()[v].value != iVec[v].value)
-                    return false
+            val iVec = i.getGameModel()
+            var res = true
+            for(v: Int in 15 downTo 0){
+                //Log.d("${i}", "${state.getGameModel()[v].value} : ${iVec[v].value}")
+                res = (state.getGameModel()[v].value == iVec[v].value) && res
             }
+            if(res)
+                return res
         }
-        return true
+        return false
     }
 }
