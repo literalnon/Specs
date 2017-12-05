@@ -3,6 +3,7 @@ package com.example.bloold.specs
 import android.util.Log
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
 /**
  * Created by bloold on 07.10.17.
@@ -10,7 +11,7 @@ import kotlin.collections.ArrayList
 
 class Algorithm(private val startState: State) {
     private var solveTree = PriorityQueue<State>()
-    private var closed = ArrayList<State>()
+    private var closed = HashSet<State>()
 
     fun solve(): State? {
         if(!startState.isSolve())
@@ -26,8 +27,8 @@ class Algorithm(private val startState: State) {
             }*/
             //получить множество состояний
             var cur_step = solveTree.poll()/*
-            Log.d("TAG", (cur_step.countDistance()).toString())
-            cur_step.printState()*/
+            Log.d("TAG", (cur_step.countDistance()).toString())*/
+            //cur_step.printState()
 
             steps = cur_step.getPossibleSteps()
 /*
