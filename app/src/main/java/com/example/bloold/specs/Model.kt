@@ -30,22 +30,22 @@ class Model {
     fun randomFill(){
         var visible = true
 
-        /*gameModel.addElement(Button(getX(0), getY(0), 1, visible))
-        gameModel.addElement(Button(getX(1), getY(2), 1 + 1, visible))
-        gameModel.addElement(Button(getX(2), getY(3), 2 + 1, visible))
-        gameModel.addElement(Button(getX(3), getY(4), 3 + 1, visible))
-        gameModel.addElement(Button(getX(4), getY(4), 4 + 1, false))
-        gameModel.addElement(Button(getX(5), getY(5), 5 + 1, visible))
-        gameModel.addElement(Button(getX(6), getY(6), 6 + 1, visible))
-        gameModel.addElement(Button(getX(7), getY(7), 7 + 1, visible))
-        gameModel.addElement(Button(getX(8), getY(8), 8 + 1, visible))
-        gameModel.addElement(Button(getX(9), getY(9), 9 + 1, visible))
-        gameModel.addElement(Button(getX(10), getY(10), 10 + 1, visible))
-        gameModel.addElement(Button(getX(15), getY(15), 15 + 1, false))
-        gameModel.addElement(Button(getX(12), getY(12), 12 + 1, visible))
-        gameModel.addElement(Button(getX(13), getY(13), 13 + 1, visible))
-        gameModel.addElement(Button(getX(14), getY(14), 14 + 1, visible))
-        gameModel.addElement(Button(getX(11), getY(11), 11 + 1, visible))*/
+        /*gameModel.addElement(Button(getX(0), getY(0), 7, visible))
+        gameModel.addElement(Button(getX(1), getY(1), 5, visible))
+        gameModel.addElement(Button(getX(2), getY(2), 10, visible))
+        gameModel.addElement(Button(getX(3), getY(3), 11, visible))
+        gameModel.addElement(Button(getX(4), getY(4), 2, visible))
+        gameModel.addElement(Button(getX(5), getY(5), 12, visible))
+        gameModel.addElement(Button(getX(6), getY(6), 4, visible))
+        gameModel.addElement(Button(getX(7), getY(7), 1, visible))
+        gameModel.addElement(Button(getX(8), getY(8), 6, visible))
+        gameModel.addElement(Button(getX(9), getY(9), 13, visible))
+        gameModel.addElement(Button(getX(10), getY(10), 3, visible))
+        gameModel.addElement(Button(getX(11), getY(11), 8, visible))
+        gameModel.addElement(Button(getX(12), getY(12), 9, visible))
+        gameModel.addElement(Button(getX(13), getY(13), 15, visible))
+        gameModel.addElement(Button(getX(14), getY(14), 16, false))
+        gameModel.addElement(Button(getX(15), getY(15), 14, visible))*/
 
         for(i: Int in 0..size){
             if(i == size)
@@ -113,7 +113,19 @@ class Model {
         var distance = 0
 
         for (i: Int in 0..size) {
-            distance += distanceOneButton(i, gameModel[i].value - 1)
+            //if(gameModel[i].visible) {
+                distance += distanceOneButton(i, gameModel[i].value - 1)
+                for (j: Int in (getX(i) + 1)..(halfSize - 1)) {
+                    if (gameModel[i].value > gameModel[j * halfSize + getY(i)].value) {
+                        distance += 2
+                    }
+                }
+                for (j: Int in (getY(i) + 1)..(halfSize - 1)) {
+                    if (gameModel[i].value > gameModel[getX(i) * halfSize + j].value) {
+                        distance += 2
+                    }
+                }
+            //}
         }
 
         return distance
@@ -130,7 +142,7 @@ class Model {
     }
 
 
-    fun getPossibleSteps(lastStep: Int?, prevState: State?, h: Int): Vector<State>{
+    fun getPossibleSteps(lastSte: Int?, prevState: State?, h: Int): Vector<State>{
         val x: Int = getX(getButton(size + 1))
         val y: Int = getY(getButton(size + 1))
 /*
@@ -141,9 +153,10 @@ class Model {
         var possibleSteps = Vector<State>()
         var copyModel: Model
 
+        val lastStep = lastSte
         //x + 1, y
         var newStep = (x + 1) * halfSize + y
-        if(newStep != lastStep && newStep > 0 && newStep <= size && getY(newStep) == y){
+        if(newStep != lastStep && newStep >= 0 && newStep <= size && getY(newStep) == y){
             copyModel = Model(size + 1, listener)
             for(i: Int in 0..15)
                 copyModel.gameModel[i] = Button(gameModel[i].getCoordinates().first,
@@ -155,7 +168,7 @@ class Model {
 
         //x - 1, y
         newStep = (x - 1) * halfSize + y
-        if(newStep != lastStep && newStep > 0 && newStep <= size && getY(newStep) == y){
+        if(newStep != lastStep && newStep >= 0 && newStep <= size && getY(newStep) == y){
             copyModel = Model(size + 1, listener)
             for(i: Int in 0..15)
                 copyModel.gameModel[i] = Button(gameModel[i].getCoordinates().first,
@@ -167,7 +180,7 @@ class Model {
 
         //x, y + 1
         newStep = x * halfSize + y + 1
-        if(newStep != lastStep && newStep > 0 && newStep <= size && getX(newStep) == x){
+        if(newStep != lastStep && newStep >= 0 && newStep <= size && getX(newStep) == x){
             copyModel = Model(size + 1, listener)
             for(i: Int in 0..15)
                 copyModel.gameModel[i] = Button(gameModel[i].getCoordinates().first,
@@ -179,7 +192,9 @@ class Model {
 
         //x, y - 1
         newStep = x * halfSize + y - 1
-        if(newStep != lastStep && newStep > 0 && newStep <= size && getX(newStep) == x){
+        //Log.d("TAG", "newStep: ${newStep} $x $halfSize $y $lastStep ${getX(newStep)}")
+        if(newStep != lastStep && newStep >= 0 && newStep <= size && getX(newStep) == x){
+            //Log.d("TAG", "newStep: true")
             copyModel = Model(size + 1, listener)
             for(i: Int in 0..15)
                 copyModel.gameModel[i] = Button(gameModel[i].getCoordinates().first,

@@ -56,7 +56,6 @@ class Adapter(private val context: Context, private var btnList: Vector<com.exam
             btnDigit.visibility = View.INVISIBLE
         }
 
-
         return btnDigit
     }
 

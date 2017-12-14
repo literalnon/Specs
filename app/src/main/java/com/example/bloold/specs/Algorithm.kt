@@ -4,6 +4,7 @@ import android.util.Log
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashSet
+import kotlin.collections.LinkedHashSet
 
 /**
  * Created by bloold on 07.10.17.
@@ -26,20 +27,23 @@ class Algorithm(private val startState: State) {
                 solveTree.toList().get(i).printState()
             }*/
             //получить множество состояний
-            var cur_step = solveTree.poll()/*
+            val cur_step = solveTree.min()!!
+            solveTree.remove(cur_step)/*
             Log.d("TAG", (cur_step.countDistance()).toString())*/
+
+            closed.add(cur_step)
+
+            //Log.d("TAG", "${cur_step.countDistance()}")
             //cur_step.printState()
 
             steps = cur_step.getPossibleSteps()
-/*
-            Log.d("possible", steps.size.toString())
 
-            for (i: Int in 0..steps.size - 1) {
+            //Log.d("possible", steps.size.toString())
+
+            /*for (i: Int in 0..steps.size - 1) {
                 Log.d("possible", steps.toList().get(i).countDistance().toString())
                 steps.toList().get(i).printState()
-            }
-*/
-            closed.add(cur_step)
+            }*/
             //посчитать для каждого расстояние
             //положить на стек
             for (step: State in steps) {
@@ -50,6 +54,7 @@ class Algorithm(private val startState: State) {
                 if(step.isSolve())
                     return step
 
+                //if (!stContains(step))
                 solveTree.add(step)
 
                 //Log.d("stateadd", ":")
@@ -70,6 +75,24 @@ class Algorithm(private val startState: State) {
             for(v: Int in 15 downTo 0){
                 //Log.d("${i}", "${state.getGameModel()[v].value} : ${iVec[v].value}")
                 res = (state.getGameModel()[v].value == iVec[v].value) && res
+                if(!res)
+                    continue
+            }
+            if(res)
+                return res
+        }
+        return false
+    }
+
+    fun stContains(state: State): Boolean{
+        for(i: State in solveTree){
+            val iVec = i.getGameModel()
+            var res = true
+            for(v: Int in 15 downTo 0){
+                //Log.d("${i}", "${state.getGameModel()[v].value} : ${iVec[v].value}")
+                res = (state.getGameModel()[v].value == iVec[v].value) && res
+                if(!res)
+                    continue
             }
             if(res)
                 return res

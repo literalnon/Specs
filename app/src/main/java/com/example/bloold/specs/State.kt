@@ -9,7 +9,7 @@ import java.util.*
  */
 class State(public var model: Model, public var lastStep: Int?, public var prevState: State?, var height: Int): Comparable<State> {
     override fun compareTo(other: State): Int {
-        return countDistance() + height - other.countDistance() - other.height
+        return countDistance() - other.countDistance()
     }
 
     fun isSolve(): Boolean{
@@ -21,7 +21,7 @@ class State(public var model: Model, public var lastStep: Int?, public var prevS
     }
 
     fun countDistance(): Int{
-        return model.countDistance()
+        return model.countDistance() + height
     }
 
     fun getGameModel(): Vector<Button>{
@@ -29,9 +29,18 @@ class State(public var model: Model, public var lastStep: Int?, public var prevS
     }
 
     fun printState(){
-        for(i: Int in 15 downTo 0){
+        /*for(i: Int in 15 downTo 0){
             Log.d("Solve ${i}", model.gameModel[i].value.toString())
+        }*/
+
+        for (i: Int in 0..3) {
+            Log.w("Solve", "${model.gameModel[4 * i].value} " +
+                                    "${model.gameModel[4 * i + 1].value} " +
+                                    "${model.gameModel[4 * i + 2].value} " +
+                                    "${model.gameModel[4 * i + 3].value}")
         }
+
+        Log.w("Solve", " --------------- ")
     }
 
     fun screenMove(){
