@@ -113,19 +113,24 @@ class Model {
         var distance = 0
 
         for (i: Int in 0..size) {
-            //if(gameModel[i].visible) {
+            if(gameModel[i].visible) {
                 distance += distanceOneButton(i, gameModel[i].value - 1)
-                for (j: Int in (getX(i) + 1)..(halfSize - 1)) {
-                    if (gameModel[i].value > gameModel[j * halfSize + getY(i)].value) {
-                        distance += 2
-                    }
-                }
+
+                //x
                 for (j: Int in (getY(i) + 1)..(halfSize - 1)) {
-                    if (gameModel[i].value > gameModel[getX(i) * halfSize + j].value) {
+                    //Log.d("tagX $i : $j : ${getY(i)}", (i + halfSize  - j).toString())
+                    if ( (getX(gameModel[i].value - 1) == getX(i)) && gameModel[i].value > gameModel[i + halfSize - j].value) { //j * halfSize + getY(i)
                         distance += 2
                     }
                 }
-            //}
+                //y
+                for (j: Int in (getX(i) + 1)..(halfSize - 1)) {
+                    //Log.d("tagY $i : $j : ${getX(i)}", (i + (halfSize  - j) * j).toString())
+                    if ((getY(gameModel[i].value - 1) == getY(i)) && gameModel[i].value > gameModel[i + (halfSize - j) * j].value) { //getX(i) * halfSize + j
+                        distance += 2
+                    }
+                }
+            }
         }
 
         return distance

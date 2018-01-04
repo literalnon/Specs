@@ -21,15 +21,16 @@ class Algorithm(private val startState: State) {
         var steps: Vector<State>
 
         while(!solveTree.isEmpty()){
-            /*
+
             for (i: Int in 0..solveTree.size - 1) {
                 Log.d("solve_tree", solveTree.toList().get(i).countDistance().toString())
                 solveTree.toList().get(i).printState()
-            }*/
+            }
             //получить множество состояний
-            val cur_step = solveTree.min()!!
-            solveTree.remove(cur_step)/*
-            Log.d("TAG", (cur_step.countDistance()).toString())*/
+            val cur_step = solveTree.peek()//solveTree.min()!!
+            solveTree.remove(cur_step)
+
+            //Log.d("TAG", (cur_step.countDistance()).toString())
 
             closed.add(cur_step)
 
@@ -40,10 +41,10 @@ class Algorithm(private val startState: State) {
 
             //Log.d("possible", steps.size.toString())
 
-            /*for (i: Int in 0..steps.size - 1) {
-                Log.d("possible", steps.toList().get(i).countDistance().toString())
-                steps.toList().get(i).printState()
-            }*/
+            for (i: Int in 0..steps.size - 1) {
+                //Log.d("possible", steps.toList().get(i).countDistance().toString())
+                steps[i].printState()
+            }
             //посчитать для каждого расстояние
             //положить на стек
             for (step: State in steps) {
@@ -62,7 +63,11 @@ class Algorithm(private val startState: State) {
                 //step.printState()
             }
 
-            //Log.d("TAG", solveTree.size.toString() + " : " + closed.size)
+            Log.d("TAG", solveTree.size.toString() + " : " + closed.size)
+
+            /*for (k: Int in 0..10000) {
+
+            }*/
         }
 
         return null
