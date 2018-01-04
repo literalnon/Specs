@@ -110,30 +110,34 @@ class Model {
     }
 
     fun countDistance(): Int{
-        var distance = 0
+        var distanceM = 0
+        var distanceL = 0
 
         for (i: Int in 0..size) {
             if(gameModel[i].visible) {
-                distance += distanceOneButton(i, gameModel[i].value - 1)
+                distanceM += distanceOneButton(i, gameModel[i].value - 1)
 
-                //x
+                /*//x
                 for (j: Int in (getY(i) + 1)..(halfSize - 1)) {
                     //Log.d("tagX $i : $j : ${getY(i)}", (i + halfSize  - j).toString())
-                    if ( (getX(gameModel[i].value - 1) == getX(i)) && gameModel[i].value > gameModel[i + halfSize - j].value) { //j * halfSize + getY(i)
-                        distance += 2
+                    val pos = i + halfSize - j
+                    if ( gameModel[pos].value != size && (getX(gameModel[i].value - 1) == getX(i)) && (getX(gameModel[pos].value - 1) == getX(i)) && gameModel[i].value > gameModel[pos].value) { //j * halfSize + getY(i)
+                        distanceL += 2
                     }
                 }
                 //y
                 for (j: Int in (getX(i) + 1)..(halfSize - 1)) {
                     //Log.d("tagY $i : $j : ${getX(i)}", (i + (halfSize  - j) * j).toString())
-                    if ((getY(gameModel[i].value - 1) == getY(i)) && gameModel[i].value > gameModel[i + (halfSize - j) * j].value) { //getX(i) * halfSize + j
-                        distance += 2
+                    val pos = i + (halfSize - j) * j
+                    if (gameModel[pos].value != size && (getY(gameModel[i].value - 1) == getY(i)) && (getY(gameModel[i + (halfSize - j) * j].value - 1) == getY(i)) && gameModel[i].value > gameModel[i + (halfSize - j) * j].value) { //getX(i) * halfSize + j
+                        distanceL += 2
                     }
-                }
+                }*/
             }
         }
 
-        return distance
+        //Log.d("distance", "l: $distanceL m: $distanceM")
+        return distanceL + distanceM
     }
 
     fun distanceOneButton(curState: Int, realState: Int): Int{
